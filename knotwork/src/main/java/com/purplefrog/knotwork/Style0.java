@@ -23,20 +23,20 @@ public abstract class Style0
     {
 
         PathData.Line overPath = new PathData.Line(x1, y1, x2, y2);
-        kl.overHalo.add(new SVGThing(haloStyle, overPath));
-        kl.over.add(new SVGThing(coreStyle, overPath));
+        kl.overHalo.add(overPath);
+        kl.over.add(overPath);
 
         PathData.Line kludeExtension1 = new PathData.Line(x1, y1, interp(x1, x2, -0.1), interp(y1,y2, -0.1));
-        kl.underHalo.add(new SVGThing(haloStyle, kludeExtension1));
-        kl.under.add(new SVGThing(coreStyle, kludeExtension1));
+        kl.underHalo.add(kludeExtension1);
+        kl.under.add(kludeExtension1);
 
         kludeExtension1 = new PathData.Line(x2, y2, interp(x1, x2, 1.1), interp(y1,y2, 1.1));
-        kl.underHalo.add(new SVGThing(haloStyle, kludeExtension1));
-        kl.under.add(new SVGThing(coreStyle, kludeExtension1));
+        kl.underHalo.add(kludeExtension1);
+        kl.under.add(kludeExtension1);
 
         PathData.Line underPath = new PathData.Line(x3, y3, x4, y4);
-        kl.underHalo.add(new SVGThing(haloStyle, underPath));
-        kl.under.add(new SVGThing(coreStyle, underPath));
+        kl.underHalo.add(underPath);
+        kl.under.add(underPath);
     }
 
     public static double interp(double a, double b, double t)
@@ -47,8 +47,8 @@ public abstract class Style0
     public void nub(KnotLayers kl, double x3, double y3, double x0, double y0)
     {
         PathData.Line line = new PathData.Line(x3, y3, x0, y0);
-        kl.underHalo.add(new SVGThing(haloStyle, line));
-        kl.under.add(new SVGThing(coreStyle, line));
+        kl.underHalo.add(line);
+        kl.under.add(line);
     }
 
 }

@@ -30,8 +30,8 @@ public class Style2
 
         PathData.Curve c = new PathData.Curve(x0,y0, x1,y1, x2,y2, x3,y3);
 
-        kl.underHalo.add(new SVGThing(haloStyle, c));
-        kl.under.add(new SVGThing(coreStyle, c));
+        kl.underHalo.add(c);
+        kl.under.add(c);
     }
 
     public static double interp(double a, double b, double t)
