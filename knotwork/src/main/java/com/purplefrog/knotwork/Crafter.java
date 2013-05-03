@@ -20,8 +20,8 @@ public class Crafter
 
         double cellSize=4;
 
-        int uSize = 5;
-        int vSize = 3;
+        int uSize = 7;
+        int vSize = 9;
 
         Style cornerStyle = true ? new Style2(): new Style1();
 
@@ -75,7 +75,7 @@ public class Crafter
         }
 
         Writer w = new FileWriter("/tmp/knot.svg");
-        writeSVG(w, uSize*cellSize, vSize*cellSize, kl.layers(SVGLine.stroke("#cfc", "3px"), SVGLine.stroke("#cfc", "3px")));
+        writeSVG(w, uSize*cellSize, vSize*cellSize, kl.layers(SVGLine.stroke("#cfc", "3px"), SVGLine.stroke("#66f", "4px")));
         w.close();
     }
 
