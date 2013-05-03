@@ -7,7 +7,24 @@ package com.purplefrog.knotwork;
  * Time: 12:02 PM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class SVGThing
+public class SVGThing
 {
-    public abstract String asSVG();
+    public String style;
+    public PathData path;
+
+    public SVGThing(String style, PathData path)
+    {
+        this.style = style;
+        this.path = path;
+    }
+
+    public String asSVG()
+    {
+        return
+            "<path\n" +
+            "       style=\"" + style + "\"\n" +
+            "       d=\"" + path.forSVG() + "\"\n" +
+            " />" +
+                "\n";
+    }
 }

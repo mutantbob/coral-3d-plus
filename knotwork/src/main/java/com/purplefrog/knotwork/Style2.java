@@ -27,8 +27,11 @@ public class Style2
         double y1 = interp(y0,y9, 0.5523);
         double x2 = interp(x3,x9, 0.5523);
         double y2 = interp(y3,y9, 0.5523);
-        kl.underHalo.add(new SVGCurve(haloStyle, x0,y0, x1,y1, x2,y2, x3,y3));
-        kl.under.add(new SVGCurve(coreStyle, x0,y0, x1,y1, x2,y2, x3,y3));
+
+        PathData.Curve c = new PathData.Curve(x0,y0, x1,y1, x2,y2, x3,y3);
+
+        kl.underHalo.add(new SVGThing(haloStyle, c));
+        kl.under.add(new SVGThing(coreStyle, c));
     }
 
     public static double interp(double a, double b, double t)

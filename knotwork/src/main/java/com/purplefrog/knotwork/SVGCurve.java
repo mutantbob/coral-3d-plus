@@ -8,7 +8,6 @@ package com.purplefrog.knotwork;
  * To change this template use File | Settings | File Templates.
  */
 public class SVGCurve
-    extends SVGThing
 {
     public String style;
     public double x0;
@@ -34,7 +33,7 @@ public class SVGCurve
         this.y3 = y3;
     }
 
-    @Override
+
     public String asSVG()
     {
         String path = "M "+x0+","+y0+" C "+x1+","+y1+" "+x2+","+y2+" "+x3+","+y3;

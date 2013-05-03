@@ -23,8 +23,9 @@ public class Style1
 
     public  void bounce(KnotLayers kl, double x3, double y3, double x0, double y0, double x2, double y2)
     {
-        kl.underHalo.add(new SVGLine(haloStyle, x3, y3, x0, y0, x2, y2));
-        kl.under.add(new SVGLine(coreStyle, x3, y3, x0, y0, x2, y2));
+        PathData.Line path = new PathData.Line(x3, y3, x0, y0, x2, y2);
+        kl.underHalo.add(new SVGThing(haloStyle, path));
+        kl.under.add(new SVGThing(coreStyle, path));
     }
 
 }

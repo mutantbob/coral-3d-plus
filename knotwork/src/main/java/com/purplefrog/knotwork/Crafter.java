@@ -16,17 +16,12 @@ public class Crafter
     public static void main(String[] argv)
         throws IOException
     {
-        List<SVGThing> overHalo = new ArrayList<SVGThing>();
-        List<SVGThing> underHalo = new ArrayList<SVGThing>();
-        List<SVGThing> over = new ArrayList<SVGThing>();
-        List<SVGThing> under = new ArrayList<SVGThing>();
-
-        KnotLayers kl = new KnotLayers(underHalo, under, overHalo, over);
+        KnotLayers kl = new KnotLayers();
 
         double cellSize=4;
 
-        int uSize = 10;
-        int vSize = 12;
+        int uSize = 5;
+        int vSize = 3;
 
         Style cornerStyle = true ? new Style2(): new Style1();
 
@@ -46,13 +41,13 @@ public class Crafter
 
                 if (u<1) {
                     if (v < 1)
-                        cornerStyle.nub(kl, x2 + 0.1, y2 + 0.1, x0, y0);
+                        cornerStyle.nub(kl, x2,y2, x0, y0);
                     else if (v + 1 >= vSize)
-                        cornerStyle.nub(kl, x2 + 0.1, y1-0.1, x0, y0);
+                        cornerStyle.nub(kl, x2,y1, x0, y0);
                     else
-                        cornerStyle.bounce(kl, x2 + 0.1, y1 - 0.1,
+                        cornerStyle.bounce(kl, x2, y1,
                             x0, y0,
-                            x2 + 0.1, y2 + 0.1);
+                            x2, y2);
 
                 } else if (u+1>= uSize) {
                     if (v < 1)
@@ -67,20 +62,20 @@ public class Crafter
                 } else if (v<1) {
                     cornerStyle.bounce(kl, x1, y2,
                         x0, y0,
-                        x2 + 0.1, y2 + 0.1);
+                        x2, y2);
                 } else if (v+1>=vSize) {
                     cornerStyle.bounce(kl, x1, y1,
                         x0, y0,
                         x2, y1);
                 } else {
-                    cornerStyle.basicOverUnder(reverse ? kl.reversed() : kl, x1, y1, x2 + 0.1, y2 + 0.1,
-                        x1, y2, x2 + 0.1, y1-0.1);
+                    cornerStyle.basicOverUnder(reverse ? kl.reversed() : kl, x1, y1, x2, y2,
+                        x1, y2, x2, y1);
                 }
             }
         }
 
         Writer w = new FileWriter("/tmp/knot.svg");
-        writeSVG(w, uSize*cellSize, vSize*cellSize, kl.layers());
+        writeSVG(w, uSize*cellSize, vSize*cellSize, kl.layers(SVGLine.stroke("#cfc", "3px"), SVGLine.stroke("#cfc", "3px")));
         w.close();
     }
 
@@ -104,12 +99,72 @@ public class Crafter
 
         for (List<SVGThing> layer : layers) {
             w.write("<g inkscape:groupmode=\"layer\" >\n");
-            for (SVGThing svgThing : layer) {
+            for (SVGThing svgThing : merged(layer)) {
                 w.write(svgThing.asSVG());
             }
             w.write("</g>\n");
         }
         w.write("</svg>\n");
+    }
+
+    public static List<SVGThing> merged(List<SVGThing> things_)
+    {
+        if (false)
+            return things_;
+
+
+        List<SVGThing> things = new ArrayList<SVGThing>(things_);
+
+        List<SVGThing> rval = new ArrayList<SVGThing>();
+
+        for (int i=0; i<things.size(); i++) {
+            String style = things.get(i).style;
+            PathData curr = things.get(i).path;
+
+            PathData r= curr.reversed();
+
+            for (int j=i+1; j<things.size(); ) {
+                SVGThing other = things.get(j);
+                if (!style.equals(other.style)) {
+                    continue;
+                }
+
+                if (other.path.startsWith(curr.endX(), curr.endY())) {
+                    System.out.println("merged");
+                    curr = curr.appended(other.path);
+                    r = curr.reversed();
+                    things.remove(j);
+                    j=i+1;
+                } else if (curr.startsWith(other.path.endX(), other.path.endY())) {
+                    System.out.println("merged R");
+                    curr = other.path.appended(curr);
+                    r = curr.reversed();
+                    things.remove(j);
+                    j=i+1;
+                } else if (other.path.startsWith(r.endX(), r.endY())) {
+                    System.out.println("merged x");
+                    curr = r.appended(other.path);
+                    r = curr.reversed();
+                    things.remove(j);
+                    j=i+1;
+                } else if (r.startsWith(other.path.endX(), other.path.endY())) {
+                    System.out.println("merged y");
+                    curr = other.path.appended(r);
+                    r = curr.reversed();
+                    things.remove(j);
+                    j=i+1;
+                } else {
+                    j++;
+                }
+            }
+
+            if (curr instanceof PathData.Multi)
+                style = style.replaceAll("stroke:#66f", "stroke:#f66").replaceAll("stroke:#cfc", "stroke:#fcc");
+
+            rval.add(new SVGThing(style, curr));
+        }
+
+        return rval;
     }
 
 }

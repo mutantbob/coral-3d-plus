@@ -11,18 +11,22 @@ import java.util.*;
  */
 public class KnotLayers
 {
-    public final List<SVGThing> underHalo;
-    public final List<SVGThing> under;
-    public final List<SVGThing> overHalo;
-    public final List<SVGThing> over;
+    public final List<PathData> underHalo;
+    public final List<PathData> under;
+    public final List<PathData> overHalo;
+    public final List<PathData> over;
 
-    public KnotLayers(List<SVGThing> underHalo, List<SVGThing> under, List<SVGThing> overHalo, List<SVGThing> over)
+    public KnotLayers(List<PathData> underHalo, List<PathData> under, List<PathData> overHalo, List<PathData> over)
     {
-
         this.underHalo = underHalo;
         this.under = under;
         this.overHalo = overHalo;
         this.over = over;
+    }
+
+    public KnotLayers()
+    {
+        this(new ArrayList<PathData>(), new ArrayList<PathData>(),new ArrayList<PathData>(),new ArrayList<PathData>());
     }
 
     public KnotLayers reversed()
@@ -30,10 +34,23 @@ public class KnotLayers
         return new KnotLayers(overHalo, over, underHalo, under);
     }
 
-    public List<SVGThing>[] layers()
+    public List<SVGThing>[] layers(String coreStyle, String haloStyle)
     {
+
         return new List[] {
-            underHalo, under, overHalo, over
+            convert(haloStyle, underHalo),
+            convert(coreStyle, under),
+            convert(haloStyle, overHalo),
+            convert(coreStyle, over)
         };
+    }
+
+    private List<SVGThing> convert(String style, List<PathData> paths)
+    {
+        List<SVGThing> rval = new ArrayList<SVGThing>();
+        for (PathData path : paths) {
+            rval.add(new SVGThing(style, path));
+        }
+        return rval;
     }
 }

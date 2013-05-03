@@ -8,7 +8,6 @@ package com.purplefrog.knotwork;
  * To change this template use File | Settings | File Templates.
  */
 public class SVGLine
-    extends SVGThing
 {
     public double[] coordPairs;
     public String style;
@@ -32,7 +31,7 @@ public class SVGLine
             "stroke-opacity:1";
     }
 
-    @Override
+
     public String asSVG()
     {
         StringBuilder path = new StringBuilder();
