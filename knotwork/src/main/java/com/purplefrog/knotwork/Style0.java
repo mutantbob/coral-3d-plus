@@ -26,14 +26,16 @@ public abstract class Style0
         kl.overHalo.add(overPath);
         kl.over.add(overPath);
 
-        PathData.Line kludeExtension1 = new PathData.Line(x1, y1, interp(x1, x2, -0.1), interp(y1,y2, -0.1));
-        kl.underHalo.add(kludeExtension1);
-        kl.under.add(kludeExtension1);
+        if (false) {
+            PathData.Line kludeExtension1 = new PathData.Line(x1, y1, interp(x1, x2, -0.1), interp(y1,y2, -0.1));
+            kl.underHalo.add(kludeExtension1);
+            kl.under.add(kludeExtension1);
 
-        kludeExtension1 = new PathData.Line(x2, y2, interp(x1, x2, 1.1), interp(y1,y2, 1.1));
-        kl.underHalo.add(kludeExtension1);
-        kl.under.add(kludeExtension1);
-
+            kludeExtension1 = new PathData.Line(x2, y2, interp(x1, x2, 1.1), interp(y1,y2, 1.1));
+            kl.underHalo.add(kludeExtension1);
+            kl.under.add(kludeExtension1);
+        }
+        
         PathData.Line underPath = new PathData.Line(x3, y3, x4, y4);
         kl.underHalo.add(underPath);
         kl.under.add(underPath);
