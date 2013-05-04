@@ -20,8 +20,8 @@ public class Crafter
 
         double cellSize=4;
 
-        int uSize = 7;
-        int vSize = 9;
+        int uSize = 13;
+        int vSize = 13;
 
         Style cornerStyle = true ? new Style2(): new Style1();
 
@@ -43,8 +43,12 @@ public class Crafter
                     if (v < 1)
                         cornerStyle.nub(kl, x2,y2, x0, y0);
                     else if (v + 1 >= vSize)
-                        cornerStyle.nub(kl, x2,y1, x0, y0);
-                    else
+                        cornerStyle.nub(kl, x2, y1, x0, y0);
+                    else if (v<2) {
+                        cornerStyle.point(kl, x2,y2, x0,y0, x2,y1);
+                    } else if (v+2 >= vSize) {
+                        cornerStyle.point(kl, x2,y1, x0,y0, x2,y2);
+                    } else
                         cornerStyle.bounce(kl, x2, y1,
                             x0, y0,
                             x2, y2);
@@ -52,21 +56,37 @@ public class Crafter
                 } else if (u+1>= uSize) {
                     if (v < 1)
                         cornerStyle.nub(kl, x1, y2, x0, y0);
-                    else if (v + 1 >= vSize)
+                    else if (v<2) {
+                        cornerStyle.point(kl, x1,y2, x0,y0, x1,y1);
+                    } else if (v + 1 >= vSize)
                         cornerStyle.nub(kl, x1, y1, x0, y0);
-                    else
+                    else if (v+2 >= vSize) {
+                        cornerStyle.point(kl, x1,y1, x0,y0, x1,y2);
+                    } else
                         cornerStyle.bounce(kl, x1, y1,
                             x0, y0,
                             x1, y2);
 
                 } else if (v<1) {
-                    cornerStyle.bounce(kl, x1, y2,
-                        x0, y0,
-                        x2, y2);
+                    if (u<2) {
+                        cornerStyle.point(kl, x2,y2, x0,y0, x1,y2);
+                    } else if (u+2>=uSize) {
+                        cornerStyle.point(kl, x1,y2, x0,y0, x2,y2);
+                    } else {
+                        cornerStyle.bounce(kl, x1, y2,
+                            x0, y0,
+                            x2, y2);
+                    }
                 } else if (v+1>=vSize) {
-                    cornerStyle.bounce(kl, x1, y1,
-                        x0, y0,
-                        x2, y1);
+                    if (u<2) {
+                        cornerStyle.point(kl, x2,y1, x0,y0, x1,y1);
+                    } else if (u+2>=uSize) {
+                        cornerStyle.point(kl, x1,y1, x0,y0, x2,y1);
+                    } else {
+                        cornerStyle.bounce(kl, x1, y1,
+                            x0, y0,
+                            x2, y1);
+                    }
                 } else {
                     cornerStyle.basicOverUnder(reverse ? kl.reversed() : kl, x1, y1, x2, y2,
                         x1, y2, x2, y1);
@@ -75,7 +95,7 @@ public class Crafter
         }
 
         Writer w = new FileWriter("/tmp/knot.svg");
-        writeSVG(w, uSize*cellSize, vSize*cellSize, kl.layers(SVGLine.stroke("#cfc", "3px"), SVGLine.stroke("#66f", "4px")));
+        writeSVG(w, uSize*cellSize, vSize*cellSize, kl.layers(SVGLine.stroke("#fd4", "3px"), SVGLine.stroke("#000", "4px")));
         w.close();
     }
 
@@ -158,7 +178,7 @@ public class Crafter
                 }
             }
 
-            if (curr instanceof PathData.Multi)
+            if (false && curr instanceof PathData.Multi)
                 style = style.replaceAll("stroke:#66f", "stroke:#f66").replaceAll("stroke:#cfc", "stroke:#fcc");
 
             rval.add(new SVGThing(style, curr));

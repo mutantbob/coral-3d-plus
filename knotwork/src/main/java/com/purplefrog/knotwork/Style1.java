@@ -28,4 +28,14 @@ public class Style1
         kl.under.add(path);
     }
 
+    public void point(KnotLayers kl, double x1, double y1, double x0, double y0, double x2, double y2)
+    {
+        double x4 = x2-x1 +x0;
+        double y4 = y2-y1 +y0;
+
+        PathData path = new PathData.Line(x1,y1, x0,y0, x4,y4);
+
+        kl.underHalo.add(path);
+        kl.under.add(path);
+    }
 }
