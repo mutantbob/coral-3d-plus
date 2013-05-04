@@ -22,7 +22,7 @@ public abstract class Style0
     public void basicOverUnder(KnotLayers kl, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
     {
 
-        PathData.Line overPath = new PathData.Line(x1, y1, x2, y2);
+        PathData.Line overPath = extendedLine(x1, y1, x2, y2);
         kl.overHalo.add(overPath);
         kl.over.add(overPath);
 
@@ -35,10 +35,19 @@ public abstract class Style0
             kl.underHalo.add(kludeExtension1);
             kl.under.add(kludeExtension1);
         }
-        
-        PathData.Line underPath = new PathData.Line(x3, y3, x4, y4);
+
+        PathData.Line underPath = extendedLine(x3, y3, x4, y4);
         kl.underHalo.add(underPath);
         kl.under.add(underPath);
+    }
+
+    private PathData.Line extendedLine(double x1, double y1, double x2, double y2)
+    {
+        double x0 = interp(x1,x2, -0.02);
+        double y0 = interp(y1,y2, -0.02);
+        double x3 = interp(x1,x2, 1.02);
+        double y3 = interp(y1,y2, 1.02);
+        return new PathData.Line(x0, y0, x3, y3);
     }
 
     public static double interp(double a, double b, double t)
