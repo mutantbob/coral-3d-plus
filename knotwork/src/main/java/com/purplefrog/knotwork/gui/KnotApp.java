@@ -1,4 +1,4 @@
-package com.purplefrog.knotwork;
+package com.purplefrog.knotwork.gui;
 
 import javax.swing.*;
 import java.awt.*;
