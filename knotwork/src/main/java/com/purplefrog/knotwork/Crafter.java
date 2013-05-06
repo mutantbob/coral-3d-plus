@@ -23,8 +23,40 @@ public class Crafter
         int uSize = 13;
         int vSize = 13;
 
+        BitMatrix hippo = new BitMatrix(uSize,  vSize);
+
+        hippo.setAt(7,9, false);
+        hippo.setAt(5,3, false);
+        hippo.setAt(3, 7, false);
+        hippo.setAt(9, 5, false);
+
+        hippo.setAt(5,5,false);
+        hippo.setAt(5,7,false);
+        hippo.setAt(6,6, false);
+        hippo.setAt(7,5,false);
+        hippo.setAt(7,7,false);
+        if (false) {
+            hippo.setAt(4,6, false);
+            hippo.setAt(6,4, false);
+            hippo.setAt(6,8, false);
+            hippo.setAt(8,6, false);
+        }
+
+//        hippo.setAt(3,7, false);
+//        hippo.setAt(2,6, false);
+
         Style cornerStyle = true ? new Style2(): new Style1();
 
+        geometrize(kl, cellSize, uSize, vSize, hippo, cornerStyle);
+
+        Writer w = new FileWriter("/tmp/knot.svg");
+        List<SVGThing>[] layers = kl.layers(SVGLine.stroke("#fd4", "3px"), SVGLine.stroke("#000", "4px"));
+        writeSVG(w, uSize*cellSize, vSize*cellSize, layers);
+        w.close();
+    }
+
+    public static void geometrize(KnotLayers kl, double cellSize, int uSize, int vSize, BitMatrix hippo, Style cornerStyle)
+    {
         for (int u=0; u< uSize; u++) {
             for (int v=0; v< vSize; v++) {
 
@@ -39,64 +71,149 @@ public class Crafter
                 double y0 = (v+0.5)*cellSize;
                 boolean reverse = 0==((u)&1);
 
-                if (u<1) {
-                    if (v < 1)
-                        cornerStyle.nub(kl, x2,y2, x0, y0);
-                    else if (v + 1 >= vSize)
-                        cornerStyle.nub(kl, x2, y1, x0, y0);
-                    else if (v<2) {
-                        cornerStyle.point(kl, x2,y2, x0,y0, x2,y1);
-                    } else if (v+2 >= vSize) {
-                        cornerStyle.point(kl, x2,y1, x0,y0, x2,y2);
-                    } else
-                        cornerStyle.bounce(kl, x2, y1,
-                            x0, y0,
-                            x2, y2);
 
-                } else if (u+1>= uSize) {
-                    if (v < 1)
-                        cornerStyle.nub(kl, x1, y2, x0, y0);
-                    else if (v<2) {
+                boolean h_e = hippo.at(u + 1, v);
+                boolean h_w = hippo.at(u - 1, v);
+                boolean h_n = hippo.at(u, v - 1);
+                boolean h_s = hippo.at(u, v + 1);
+
+                if (!h_e) {
+                    if (!h_w) {
+                        // dead space
+                    } else if (!hippo.at(u-1, v-2)) {
                         cornerStyle.point(kl, x1,y2, x0,y0, x1,y1);
-                    } else if (v + 1 >= vSize)
-                        cornerStyle.nub(kl, x1, y1, x0, y0);
-                    else if (v+2 >= vSize) {
+                    } else if (!hippo.at(u-1, v+2)) {
                         cornerStyle.point(kl, x1,y1, x0,y0, x1,y2);
-                    } else
+                    } else {
                         cornerStyle.bounce(kl, x1, y1,
                             x0, y0,
                             x1, y2);
+                    }
+                } else if (!h_n) {
 
-                } else if (v<1) {
-                    if (u<2) {
-                        cornerStyle.point(kl, x2,y2, x0,y0, x1,y2);
-                    } else if (u+2>=uSize) {
+                    if (!h_s) {
+                        // dead space
+                    } else if (!hippo.at(u + 2, v+1)) {
                         cornerStyle.point(kl, x1,y2, x0,y0, x2,y2);
+                    } else if (!hippo.at(u-2, v+1)) {
+                        cornerStyle.point(kl, x2,y2, x0,y0, x1,y2);
                     } else {
-                        cornerStyle.bounce(kl, x1, y2,
-                            x0, y0,
-                            x2, y2);
+                        cornerStyle.bounce(kl, x1,y2, x0,y0, x2,y2);
                     }
-                } else if (v+1>=vSize) {
-                    if (u<2) {
-                        cornerStyle.point(kl, x2,y1, x0,y0, x1,y1);
-                    } else if (u+2>=uSize) {
+
+                } else if (!h_w) {
+
+                    if (!hippo.at(u+1, v-2)) {
+                        cornerStyle.point(kl, x2,y2, x0,y0, x2,y1);
+                    } else if (!hippo.at(u+1, v+2)) {
+                        cornerStyle.point(kl, x2,y1, x0,y0, x2,y2);
+                    } else {
+                        cornerStyle.bounce(kl, x2,y2, x0,y0, x2,y1);
+                    }
+                } else if (!h_s) {
+
+                    if (!hippo.at(u+2, v-1)) {
                         cornerStyle.point(kl, x1,y1, x0,y0, x2,y1);
+                    } else if (!hippo.at(u-2, v-1)) {
+                        cornerStyle.point(kl, x2,y1, x0,y0, x1,y1);
                     } else {
-                        cornerStyle.bounce(kl, x1, y1,
-                            x0, y0,
-                            x2, y1);
+                        cornerStyle.bounce(kl, x1,y1, x0,y0, x2,y1);
                     }
-                } else {
+
+                } else if (h_n&&h_s&&h_w&&h_e) {
                     cornerStyle.basicOverUnder(reverse ? kl.reversed() : kl, x1, y1, x2, y2,
                         x1, y2, x2, y1);
+                } else {
+                    // dead space
                 }
             }
         }
+    }
 
-        Writer w = new FileWriter("/tmp/knot.svg");
-        writeSVG(w, uSize*cellSize, vSize*cellSize, kl.layers(SVGLine.stroke("#fd4", "3px"), SVGLine.stroke("#000", "4px")));
-        w.close();
+    public static class BitMatrix
+    {
+
+        private final int uSize;
+        private final int vSize;
+        boolean [] hippo;
+
+        public BitMatrix(int uSize, int vSize)
+        {
+            this.uSize = uSize;
+            this.vSize = vSize;
+            hippo = new boolean[uSize*vSize];
+            Arrays.fill(hippo, true);
+        }
+
+        public boolean at(int u, int v)
+        {
+            if (u<0 || u>= uSize
+                || v<0 || v>=vSize)
+                return false;
+
+            return hippo[v*uSize +u];
+        }
+
+        public void setAt(int u,int v, boolean newVal)
+        {
+             hippo[v*uSize +u] = newVal;
+        }
+    }
+
+    private static void giraffe(KnotLayers kl, int uSize, int vSize, Style cornerStyle, int u, int v, double x1, double y1, double x2, double y2, double x0, double y0, boolean reverse)
+    {
+        if (u<1) {
+            if (v < 1)
+                cornerStyle.nub(kl, x2,y2, x0, y0);
+            else if (v + 1 >= vSize)
+                cornerStyle.nub(kl, x2, y1, x0, y0);
+            else if (v<2) {
+                cornerStyle.point(kl, x2,y2, x0,y0, x2,y1);
+            } else if (v+2 >= vSize) {
+                cornerStyle.point(kl, x2,y1, x0,y0, x2,y2);
+            } else
+                cornerStyle.bounce(kl, x2, y1,
+                    x0, y0,
+                    x2, y2);
+
+        } else if (u+1>= uSize) {
+            if (v < 1)
+                cornerStyle.nub(kl, x1, y2, x0, y0);
+            else if (v<2) {
+                cornerStyle.point(kl, x1,y2, x0,y0, x1,y1);
+            } else if (v + 1 >= vSize)
+                cornerStyle.nub(kl, x1, y1, x0, y0);
+            else if (v+2 >= vSize) {
+                cornerStyle.point(kl, x1,y1, x0,y0, x1,y2);
+            } else
+                cornerStyle.bounce(kl, x1, y1,
+                    x0, y0,
+                    x1, y2);
+
+        } else if (v<1) {
+            if (u<2) {
+                cornerStyle.point(kl, x2,y2, x0,y0, x1,y2);
+            } else if (u+2>=uSize) {
+                cornerStyle.point(kl, x1,y2, x0,y0, x2,y2);
+            } else {
+                cornerStyle.bounce(kl, x1, y2,
+                    x0, y0,
+                    x2, y2);
+            }
+        } else if (v+1>=vSize) {
+            if (u<2) {
+                cornerStyle.point(kl, x2,y1, x0,y0, x1,y1);
+            } else if (u+2>=uSize) {
+                cornerStyle.point(kl, x1,y1, x0,y0, x2,y1);
+            } else {
+                cornerStyle.bounce(kl, x1, y1,
+                    x0, y0,
+                    x2, y1);
+            }
+        } else {
+            cornerStyle.basicOverUnder(reverse ? kl.reversed() : kl, x1, y1, x2, y2,
+                x1, y2, x2, y1);
+        }
     }
 
     public static void writeSVG(Writer w, double width, double height, List<SVGThing>... layers)
