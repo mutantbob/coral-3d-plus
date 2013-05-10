@@ -113,6 +113,8 @@ public class KnotPanel
 
         Dimension size = getSize();
 
+        g2_.drawString("keys: n,x,c,p,s", 10, 20);
+
         int cellSize = cellSize(size);
 
         int x0 = (size.width - nColumns *cellSize + 2*cellSize/2) /2;
@@ -177,7 +179,7 @@ public class KnotPanel
     {
         for (int v=0; v< nRows; v++) {
             for (int u=0; u< nColumns; u++) {
-                if (NodeGrid.echidna(u, v)) {
+                if (NodeGrid.isNodeCoordinate(u, v)) {
                     NodeShape n1 = nodes.get(u,v);
                     if (null != n1)
                         n1.apply(over, overHalo, under, underHalo,
@@ -193,7 +195,7 @@ public class KnotPanel
 
         for (int v=0; v< nRows; v++) {
             for (int u=0; u< nColumns; u++) {
-                if (NodeGrid.echidna(u, v)) {
+                if (NodeGrid.isNodeCoordinate(u, v)) {
                     int x = u * cellSize;
                     int y = v * cellSize;
                     crosses.append(new Line2D.Double(x - cellSize / 4.0, y - cellSize / 4.0, x + cellSize / 4.0, y + cellSize / 4.0), false);
@@ -218,8 +220,10 @@ public class KnotPanel
         renderNodes(scale, g2);
 
         try {
-            File of = new File("/tmp/knot.png");
+            String tmpdir = System.getProperty("java.io.tmpdir");
+            File of = new File(tmpdir, "knot.png");
             System.out.println("saving to "+of);
+            JOptionPane.showMessageDialog(this, "saving to "+of, "saving", JOptionPane.INFORMATION_MESSAGE);
             ImageIO.write(bi, "PNG", of);
         } catch (IOException e) {
             e.printStackTrace();
@@ -263,7 +267,7 @@ public class KnotPanel
             int u = nodeCursor.x;
             int v = nodeCursor.y;
 
-            if (nodes.echidna(u, v)) {
+            if (NodeGrid.isNodeCoordinate(u, v)) {
                 NodeShape n2=null;
                 NodeShape n1 = nodes.get(u, v);
                 if (ch == 'c') {

@@ -56,7 +56,7 @@ public class NodeGrid
 
     public static NodeShape pickShape(int nColumns, int nRows, int u, int v)
     {
-        if (!echidna(u,v))
+        if (!isNodeCoordinate(u, v))
             return null;
 
         if (u==0) {
@@ -101,7 +101,10 @@ public class NodeGrid
         return (u&1)!=0;
     }
 
-    public static boolean echidna(int u, int v)
+    /**
+     * half of all coordinates are NOT node coordinates.
+     */
+    public static boolean isNodeCoordinate(int u, int v)
     {
         return ((u+v) &1)!=0;
     }
