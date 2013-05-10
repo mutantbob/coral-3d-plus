@@ -17,8 +17,8 @@ import java.awt.geom.*;
 public class Corner
     extends AbstractShape
 {
-    private final int dx;
-    private final int dy;
+    public final int dx;
+    public final int dy;
 
     public Corner(int dx, int dy)
     {
@@ -70,5 +70,25 @@ public class Corner
         curve.transform(new AffineTransform(dx, dy, -dy, dx, (1-dx + dy)/2, (1-dx-dy)/2));
 
         return curve;
+    }
+
+    public boolean connectsNE()
+    {
+        return dy>0 || dx<0;
+    }
+
+    public boolean connectsNW()
+    {
+        return dy>0 || dx>0;
+    }
+
+    public boolean connectsSE()
+    {
+        return dy<0 || dx<0;
+    }
+
+    public boolean connectsSW()
+    {
+        return dy<0 || dx>0;
     }
 }

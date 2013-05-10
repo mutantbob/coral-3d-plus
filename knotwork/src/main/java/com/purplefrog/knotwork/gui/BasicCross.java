@@ -13,11 +13,31 @@ import java.awt.geom.*;
 public class BasicCross
     extends AbstractShape
 {
-    private boolean polarity;
+    public final boolean polarity;
 
     public BasicCross(boolean polarity)
     {
         this.polarity = polarity;
+    }
+
+    public boolean connectsNE()
+    {
+        return true;
+    }
+
+    public boolean connectsNW()
+    {
+        return true;
+    }
+
+    public boolean connectsSE()
+    {
+        return true;
+    }
+
+    public boolean connectsSW()
+    {
+        return true;
     }
 
     public void apply(GeneralPath over, GeneralPath overHalo, GeneralPath under, GeneralPath underHalo, double west, double east, double north, double south, KnotParams knotParams)
@@ -96,6 +116,8 @@ public class BasicCross
 
         return new Polygon(xs, ys, 4);
     }
+
+
 
     public static class KnotParams
     {

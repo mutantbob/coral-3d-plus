@@ -15,4 +15,8 @@ public interface NodeShape
     void apply(GeneralPath over, GeneralPath overHalo, GeneralPath under, GeneralPath underHalo, double west, double east, double north, double south, BasicCross.KnotParams knotParams);
 
 
+    boolean connectsNE();
+    boolean connectsNW();
+    boolean connectsSE();
+    boolean connectsSW();
 }

@@ -13,10 +13,37 @@ public class DoubleCurve
     extends AbstractShape
 {
     protected Corner c1, c2;
-    public DoubleCurve(int dx, int dy)
+
+    public boolean horizontal;
+
+    public DoubleCurve(boolean horizontal)
     {
+        this.horizontal = horizontal;
+
+        int dx = horizontal ? 0 : 1;
+        int dy = horizontal ? 1 : 0;
         c1 = new Corner(dx, dy);
         c2 = new Corner(-dx, -dy);
+    }
+
+    public boolean connectsNE()
+    {
+        return true;
+    }
+
+    public boolean connectsNW()
+    {
+        return true;
+    }
+
+    public boolean connectsSE()
+    {
+        return true;
+    }
+
+    public boolean connectsSW()
+    {
+        return true;
     }
 
     public void apply(GeneralPath over, GeneralPath overHalo, GeneralPath under, GeneralPath underHalo, double west, double east, double north, double south, BasicCross.KnotParams knotParams)

@@ -124,4 +124,24 @@ public class PointArc
 
         return rval;
     }
+
+    public boolean connectsNE()
+    {
+        return arrangement<1 || arrangement>4;
+    }
+
+    public boolean connectsNW()
+    {
+        return arrangement<3 || arrangement>6;
+    }
+
+    public boolean connectsSE()
+    {
+        return arrangement>2 && arrangement < 7;
+    }
+
+    public boolean connectsSW()
+    {
+        return arrangement>0 && arrangement < 5;
+    }
 }
