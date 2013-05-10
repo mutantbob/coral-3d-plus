@@ -34,6 +34,8 @@ public class KnotApp
 
         fr.pack();
 
+        fr.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
         x.requestFocusInWindow();
 
         fr.setVisible(true);
