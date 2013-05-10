@@ -1,8 +1,12 @@
 package com.purplefrog.knotwork.gui;
 
+import javax.imageio.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.geom.*;
+import java.awt.image.*;
+import java.io.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,17 +23,105 @@ public class KnotPanel
 
     protected NodeGrid nodes;
 
+    Point nodeCursor=null;
 
-    public KnotPanel(int nColumns, int nRows)
+    public KnotPanel(int nColumns_, int nRows_)
     {
-        this.nColumns = nColumns;
-        this.nRows = nRows;
+        this.nColumns = nColumns_;
+        this.nRows = nRows_;
         nodes = new NodeGrid(nColumns, nRows);
 
-        nodes.set(6,5, new DoubleCurve(0,1));
-        nodes.set(6,7, new DoubleCurve(0,1));
-        nodes.set(5,6, new DoubleCurve(1,0));
-        nodes.set(7,6, new DoubleCurve(1,0));
+        if (false) {
+            nodes.set(6,5, new DoubleCurve(true));
+            nodes.set(6,7, new DoubleCurve(true));
+            nodes.set(5,6, new DoubleCurve(false));
+            nodes.set(7,6, new DoubleCurve(false));
+        } else {
+
+            nodes.set(6,5, new DoubleCurve(false));
+            nodes.set(6,7, new DoubleCurve(false));
+            nodes.set(5,6, new DoubleCurve(true));
+            nodes.set(7,6, new DoubleCurve(true));
+        }
+
+        setFocusable(true);
+
+        addMouseMotionListener(new MouseMotionAdapter()
+        {
+            @Override
+            public void mouseMoved(MouseEvent e)
+            {
+                if (!isFocusOwner())
+                    requestFocus(); // XXX work around bugs in java, or fvwm, not sure which
+
+                PaintParams p = new PaintParams();
+
+                int u = (int) Math.round((e.getX()- p.x0)/(double) p.cellSize);
+                int v  = (int) Math.round((e.getY()- p.y0)/(double) p.cellSize);
+//                System.out.println(e.getX()+","+e.getY()+" => "+u+","+v);
+
+                if (u<0 || u >= nColumns
+                    || v<0 || v >=nRows)
+                    return; //never mind
+
+                if (nodeCursor != null) {
+                    scheduleCellRepaint(p.cellSize, p.x0, p.y0, nodeCursor.x, nodeCursor.y);
+                }
+                nodeCursor = new Point(u, v);
+                scheduleCellRepaint(p, u, v);
+            }
+        });
+
+        addKeyListener(new KeyHandler());
+    }
+
+    public Corner guessCorner(int u, int v)
+    {
+        NodeConnectivity ct = new NodeConnectivity(u, v);
+
+        if (ct.sw && ct.nw)
+            return new Corner(1, 0);
+        else if (ct.nw && ct.ne)
+            return new Corner(0, 1);
+        else if (ct.ne && ct.se)
+            return new Corner(-1, 0);
+        else if (ct.se && ct.sw)
+            return new Corner(0, -1);
+
+        return new Corner(1,0);
+    }
+
+    public PointArc guessPointArc(int u, int v)
+    {
+        NodeConnectivity ct = new NodeConnectivity(u, v);
+
+        if (ct.sw && ct.nw)
+            return new PointArc(1);
+        else if (ct.nw && ct.ne)
+            return new PointArc(7);
+        else if (ct.ne && ct.se)
+            return new PointArc(5);
+        else if (ct.se && ct.sw)
+            return new PointArc(3);
+
+        return new PointArc(0);
+    }
+
+
+
+    private void scheduleCellRepaint(PaintParams p, int u, int v)
+    {
+        scheduleCellRepaint(p.cellSize, p.x0, p.y0, u, v);
+    }
+
+    private void scheduleCellRepaint(int u, int v)
+    {
+        scheduleCellRepaint(new PaintParams(), u, v);
+    }
+
+    private void scheduleCellRepaint(int cellSize, int x0, int y0, int u, int v)
+    {
+        repaint(50, x0 + cellSize * u - cellSize, y0 + cellSize * v - cellSize, cellSize * 2, cellSize * 2);
     }
 
     @Override
@@ -50,10 +142,8 @@ public class KnotPanel
         Graphics2D g2_ = (Graphics2D) g_;
 
         Dimension size = getSize();
-        int xOver = size.width - size.height * (nColumns +3)/(nRows +3);
-        int yOver = size.height - size.width * (nRows +3)/(nColumns +3);
 
-        int cellSize = Math.min(size.height / (nRows + 3), size.width / (nColumns + 3));
+        int cellSize = cellSize(size);
 
         int x0 = (size.width - nColumns *cellSize + 2*cellSize/2) /2;
         int y0 = (size.height - nRows *cellSize + 3*cellSize/2) /2;
@@ -62,46 +152,58 @@ public class KnotPanel
         g2.translate(x0, y0);
 
         Graphics2D gRed = (Graphics2D) g2.create();
-
         gRed.setColor(new Color(150,0,0, 128));
         gRed.setStroke(new BasicStroke((float) Math.max(1, cellSize / 10.0)));
 
-        {
-            GeneralPath over = new GeneralPath();
-            GeneralPath under = new GeneralPath();
-            GeneralPath overHalo = new GeneralPath();
-            GeneralPath underHalo = new GeneralPath();
-            renderNodes(cellSize, over, overHalo, under, underHalo, new BasicCross.KnotParams(5.0/32, 7.0/32));
+        Graphics2D gCursor = (Graphics2D) g2.create();
+        gCursor.setColor(new Color(0,255,255));
 
-            Graphics2D gYellow = (Graphics2D) g2.create();
-            gYellow.setColor(new Color(255, 255, 0));
-            Graphics2D gBlack = (Graphics2D) g2.create();
-            gBlack.setColor(new Color(0,0,0));
-            gBlack.fill(underHalo);
-            gYellow.fill(under);
-            gBlack.fill(overHalo);
-            gYellow.fill(over);
-        }
+        renderNodes(cellSize, g2);
 
-        drawPointSquares(cellSize, g2);
+        drawPointSquares(cellSize, g2, gCursor);
 
         gRed.draw(makeCrosses(cellSize));
     }
 
-    private void drawPointSquares(int cellSize, Graphics2D g2)
+    private void renderNodes(int cellSize, Graphics2D g2)
+    {
+        GeneralPath over = new GeneralPath();
+        GeneralPath under = new GeneralPath();
+        GeneralPath overHalo = new GeneralPath();
+        GeneralPath underHalo = new GeneralPath();
+        collectNodeShapes(cellSize, over, overHalo, under, underHalo, new BasicCross.KnotParams(5.0 / 32, 7.0 / 32));
+
+        Graphics2D gYellow = (Graphics2D) g2.create();
+        gYellow.setColor(new Color(255, 255, 0));
+        Graphics2D gBlack = (Graphics2D) g2.create();
+        gBlack.setColor(new Color(0,0,0));
+        gBlack.fill(underHalo);
+        gYellow.fill(under);
+        gBlack.fill(overHalo);
+        gYellow.fill(over);
+    }
+
+    private int cellSize(Dimension size)
+    {
+        return Math.min(size.height / (nRows + 3), size.width / (nColumns + 3));
+    }
+
+    private void drawPointSquares(int cellSize, Graphics2D normal, Graphics2D cursor)
     {
         for (int v=0; v< nRows; v++) {
             for (int u=0; u< nColumns; u++) {
                 int x = u * cellSize;
                 int y = v * cellSize ;
                 int bacon = Math.max(1, cellSize/10);
-                g2.fillRect(x-bacon/2, y-bacon/2, bacon, bacon);
+                boolean onCursor = nodeCursor != null && u == nodeCursor.x && v == nodeCursor.y;
+                Graphics2D g = onCursor ? cursor : normal;
+                g.fillRect(x-bacon/2, y-bacon/2, bacon, bacon);
 
             }
         }
     }
 
-    public void renderNodes(int cellSize, GeneralPath over, GeneralPath overHalo, GeneralPath under, GeneralPath underHalo, BasicCross.KnotParams knotParams)
+    public void collectNodeShapes(int cellSize, GeneralPath over, GeneralPath overHalo, GeneralPath under, GeneralPath underHalo, BasicCross.KnotParams knotParams)
     {
         for (int v=0; v< nRows; v++) {
             for (int u=0; u< nColumns; u++) {
@@ -132,4 +234,129 @@ public class KnotPanel
         return crosses;
     }
 
+
+    public void saveToImage()
+    {
+        int scale = 64;
+
+        BufferedImage bi = new BufferedImage((nColumns)*scale, (nRows)*scale, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2 = bi.createGraphics();
+
+        g2.translate(scale/2, scale/2);
+
+        renderNodes(scale, g2);
+
+        try {
+            File of = new File("/tmp/knot.png");
+            System.out.println("saving to "+of);
+            ImageIO.write(bi, "PNG", of);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class PaintParams
+    {
+        public int cellSize;
+        public int x0;
+        public int y0;
+
+        public PaintParams()
+        {
+
+            Dimension size = getSize();
+            cellSize = cellSize(size);
+
+            x0 = (size.width - nColumns * cellSize + 2 * cellSize / 2) / 2;
+            y0 = (size.height - nRows * cellSize + 3 * cellSize / 2) / 2;
+        }
+
+    }
+
+    protected class NodeConnectivity
+    {
+        public final int u;
+        public final int v;
+        public final boolean sw;
+        public final boolean se;
+        public final boolean nw;
+        public final boolean ne;
+
+        public NodeConnectivity(int u, int v)
+        {
+            this.u = u;
+            this.v = v;
+
+            NodeShape nsw = nodes.get(u-1, v+1);
+            sw = nsw != null && nsw.connectsNE();
+
+            NodeShape nse = nodes.get(u+1, v+1);
+            se = nse != null && nse.connectsNW();
+
+            NodeShape nnw = nodes.get(u-1, v-1);
+            nw = nnw != null && nnw.connectsSE();
+
+            NodeShape nne = nodes.get(u+1, v-1);
+            ne = nne != null && nne.connectsSW();
+        }
+
+    }
+
+    private class KeyHandler
+        extends KeyAdapter
+    {
+        @Override
+        public void keyTyped(KeyEvent e)
+        {
+            char ch = e.getKeyChar();
+
+            if (ch=='s') {
+                saveToImage();
+                return;
+            }
+
+            if (nodeCursor == null)
+                return;
+
+            int u = nodeCursor.x;
+            int v = nodeCursor.y;
+
+            if (nodes.echidna(u, v)) {
+                NodeShape n2=null;
+                NodeShape n1 = nodes.get(u, v);
+                if (ch == 'c') {
+                    if (n1 instanceof Corner) {
+                        Corner corner = (Corner) n1;
+                        n2 = new Corner(-corner.dy, corner.dx);
+                    } else {
+                        n2 = guessCorner(u,v);
+                    }
+                } else if (ch=='x') {
+                    if (n1 instanceof BasicCross) {
+                        BasicCross old = (BasicCross) n1;
+                        n2 = new BasicCross(old.polarity);
+                    } else {
+                        n2 = new BasicCross(NodeGrid.crossPolarity(u));
+                    }
+                } else if (ch=='p') {
+
+                    if (n1 instanceof PointArc) {
+                        PointArc pointArc = (PointArc) n1;
+                        n2 = new PointArc( (pointArc.arrangement+1) &7);
+                    } else {
+                        n2 = guessPointArc(u,v);
+                    }
+
+                } else if (ch=='n') {
+                    nodes.set(u,v, null);
+                    scheduleCellRepaint(u,v);
+                }
+                if (null != n2) {
+                    nodes.set(u, v, n2);
+                    scheduleCellRepaint(u, v);
+                }
+            }
+        }
+    }
 }

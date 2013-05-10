@@ -33,6 +33,9 @@ public class NodeGrid
 
     public NodeShape get(int u, int v)
     {
+        if (u<0 || u>=nColumns
+            || v<0 || v>=nRows)
+            return null;
         return nodes[pos_(u,v)];
     }
 
@@ -90,12 +93,17 @@ public class NodeGrid
             }
         }
 
-        return new BasicCross((u&1)!=0);
+        return new BasicCross(crossPolarity(u));
+    }
+
+    public static boolean crossPolarity(int u)
+    {
+        return (u&1)!=0;
     }
 
     public static boolean echidna(int u, int v)
     {
-        return ((u+v)&1)!=0;
+        return ((u+v) &1)!=0;
     }
 
 }
