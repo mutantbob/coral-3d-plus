@@ -77,7 +77,7 @@ public class KnotPanel
 
     public Corner guessCorner(int u, int v)
     {
-        NodeConnectivity ct = new NodeConnectivity(u, v);
+        NodeGrid.Connectivity ct = nodes.new Connectivity(u, v);
 
         if (ct.sw && ct.nw)
             return new Corner(1, 0);
@@ -93,7 +93,7 @@ public class KnotPanel
 
     public PointArc guessPointArc(int u, int v)
     {
-        NodeConnectivity ct = new NodeConnectivity(u, v);
+        NodeGrid.Connectivity ct = nodes.new Connectivity(u, v);
 
         if (ct.sw && ct.nw)
             return new PointArc(1);
@@ -270,35 +270,6 @@ public class KnotPanel
 
             x0 = (size.width - nColumns * cellSize + 2 * cellSize / 2) / 2;
             y0 = (size.height - nRows * cellSize + 3 * cellSize / 2) / 2;
-        }
-
-    }
-
-    protected class NodeConnectivity
-    {
-        public final int u;
-        public final int v;
-        public final boolean sw;
-        public final boolean se;
-        public final boolean nw;
-        public final boolean ne;
-
-        public NodeConnectivity(int u, int v)
-        {
-            this.u = u;
-            this.v = v;
-
-            NodeShape nsw = nodes.get(u-1, v+1);
-            sw = nsw != null && nsw.connectsNE();
-
-            NodeShape nse = nodes.get(u+1, v+1);
-            se = nse != null && nse.connectsNW();
-
-            NodeShape nnw = nodes.get(u-1, v-1);
-            nw = nnw != null && nnw.connectsSE();
-
-            NodeShape nne = nodes.get(u+1, v-1);
-            ne = nne != null && nne.connectsSW();
         }
 
     }

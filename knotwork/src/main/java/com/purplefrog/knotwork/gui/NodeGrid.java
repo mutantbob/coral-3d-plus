@@ -106,4 +106,35 @@ public class NodeGrid
         return ((u+v) &1)!=0;
     }
 
+
+    public class Connectivity
+    {
+        public final int u;
+        public final int v;
+        public final boolean sw;
+        public final boolean se;
+        public final boolean nw;
+        public final boolean ne;
+
+        public Connectivity(int u, int v)
+        {
+            this.u = u;
+            this.v = v;
+
+            NodeShape nsw = get(u-1, v+1);
+            sw = nsw != null && nsw.connectsNE();
+
+            NodeShape nse = get(u+1, v+1);
+            se = nse != null && nse.connectsNW();
+
+            NodeShape nnw = get(u-1, v-1);
+            nw = nnw != null && nnw.connectsSE();
+
+            NodeShape nne = get(u+1, v-1);
+            ne = nne != null && nne.connectsSW();
+        }
+
+    }
+
+
 }
