@@ -20,6 +20,7 @@ public class KnotPanel
 {
     private final int nColumns;
     private final int nRows;
+    protected final BasicCross.KnotParams lineThickness = new BasicCross.KnotParams(5.0 / 32, 7.0 / 32);
 
     protected NodeGrid nodes;
 
@@ -138,7 +139,7 @@ public class KnotPanel
         GeneralPath under = new GeneralPath();
         GeneralPath overHalo = new GeneralPath();
         GeneralPath underHalo = new GeneralPath();
-        collectNodeShapes(cellSize, over, overHalo, under, underHalo, new BasicCross.KnotParams(5.0 / 32, 7.0 / 32));
+        collectNodeShapes(cellSize, over, overHalo, under, underHalo, lineThickness);
 
         Graphics2D gYellow = (Graphics2D) g2.create();
         gYellow.setColor(new Color(255, 255, 0));
