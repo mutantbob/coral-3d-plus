@@ -19,7 +19,7 @@ public class KnotApp
     public KnotApp()
     {
         super(new BorderLayout());
-        graph = new KnotPanel(13, 13);
+        graph = new KnotPanel(25, 25);
         add(graph);
     }
 
@@ -27,9 +27,16 @@ public class KnotApp
     {
         JFrame fr = new JFrame("knot editor");
 
-        fr.getContentPane().add(new KnotApp());
+//        fr.setFocusable(true);
+
+        KnotApp x = new KnotApp();
+        fr.getContentPane().add(x);
 
         fr.pack();
+
+        x.requestFocusInWindow();
+
         fr.setVisible(true);
+
     }
 }
