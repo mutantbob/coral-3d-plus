@@ -19,7 +19,7 @@ public class Grow
         Topology1 topology = new Topology1();
 
         registerLump(l, 0,0,0);
-        for (int i=0; l.count()<100; i++) {
+        for (int i=0; l.count()<1000; i++) {
             randomWalk(l, rand, topology, new Topology2());
         }
     }
