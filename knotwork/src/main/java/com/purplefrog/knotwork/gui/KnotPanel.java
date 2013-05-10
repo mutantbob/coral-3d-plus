@@ -75,39 +75,6 @@ public class KnotPanel
         addKeyListener(new KeyHandler());
     }
 
-    public Corner guessCorner(int u, int v)
-    {
-        NodeGrid.Connectivity ct = nodes.new Connectivity(u, v);
-
-        if (ct.sw && ct.nw)
-            return new Corner(1, 0);
-        else if (ct.nw && ct.ne)
-            return new Corner(0, 1);
-        else if (ct.ne && ct.se)
-            return new Corner(-1, 0);
-        else if (ct.se && ct.sw)
-            return new Corner(0, -1);
-
-        return new Corner(1,0);
-    }
-
-    public PointArc guessPointArc(int u, int v)
-    {
-        NodeGrid.Connectivity ct = nodes.new Connectivity(u, v);
-
-        if (ct.sw && ct.nw)
-            return new PointArc(1);
-        else if (ct.nw && ct.ne)
-            return new PointArc(7);
-        else if (ct.ne && ct.se)
-            return new PointArc(5);
-        else if (ct.se && ct.sw)
-            return new PointArc(3);
-
-        return new PointArc(0);
-    }
-
-
 
     private void scheduleCellRepaint(PaintParams p, int u, int v)
     {
@@ -274,7 +241,7 @@ public class KnotPanel
 
     }
 
-    private class KeyHandler
+    public class KeyHandler
         extends KeyAdapter
     {
         @Override
@@ -301,7 +268,7 @@ public class KnotPanel
                         Corner corner = (Corner) n1;
                         n2 = new Corner(-corner.dy, corner.dx);
                     } else {
-                        n2 = guessCorner(u,v);
+                        n2 = nodes.guessCorner(u,v);
                     }
                 } else if (ch=='x') {
                     if (n1 instanceof BasicCross) {
@@ -316,7 +283,7 @@ public class KnotPanel
                         PointArc pointArc = (PointArc) n1;
                         n2 = new PointArc( (pointArc.arrangement+1) &7);
                     } else {
-                        n2 = guessPointArc(u,v);
+                        n2 = nodes.guessPointArc(u,v);
                     }
 
                 } else if (ch=='n') {

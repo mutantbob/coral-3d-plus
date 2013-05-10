@@ -106,6 +106,38 @@ public class NodeGrid
         return ((u+v) &1)!=0;
     }
 
+    public Corner guessCorner(int u, int v)
+    {
+        Connectivity ct = new Connectivity(u, v);
+
+        if (ct.sw && ct.nw)
+            return new Corner(1, 0);
+        else if (ct.nw && ct.ne)
+            return new Corner(0, 1);
+        else if (ct.ne && ct.se)
+            return new Corner(-1, 0);
+        else if (ct.se && ct.sw)
+            return new Corner(0, -1);
+
+        return new Corner(1,0);
+    }
+
+    public PointArc guessPointArc(int u, int v)
+    {
+        Connectivity ct = new Connectivity(u, v);
+
+        if (ct.sw && ct.nw)
+            return new PointArc(1);
+        else if (ct.nw && ct.ne)
+            return new PointArc(7);
+        else if (ct.ne && ct.se)
+            return new PointArc(5);
+        else if (ct.se && ct.sw)
+            return new PointArc(3);
+
+        return new PointArc(0);
+    }
+
 
     public class Connectivity
     {
