@@ -15,12 +15,14 @@ public class SimplePathIterator
     private final double[] xs;
     private final double[] ys;
     int idx;
+    private final boolean closed;
 
-    public SimplePathIterator(double[] xs, double[] ys)
+    public SimplePathIterator(double[] xs, double[] ys, boolean closed)
     {
         this.xs = xs;
         this.ys = ys;
         idx = 0;
+        this.closed = closed;
     }
 
     public int getWindingRule()
@@ -30,7 +32,11 @@ public class SimplePathIterator
 
     public boolean isDone()
     {
-        return idx> xs.length;
+        if (closed) {
+            return idx> xs.length;
+        } else {
+            return idx >=xs.length;
+        }
     }
 
     public void next()

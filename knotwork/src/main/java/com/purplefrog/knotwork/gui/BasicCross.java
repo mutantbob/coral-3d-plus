@@ -75,7 +75,7 @@ public class BasicCross
         double[] ys = { y1,  y2,  y3,  y4};
 
         GeneralPath rval = new GeneralPath();
-        rval.append(new SimplePathIterator(xs, ys), false);
+        rval.append(new SimplePathIterator(xs, ys, true), false);
         return rval;
     }
 
@@ -95,7 +95,7 @@ public class BasicCross
         double[] ys = { y1,  y2,  y3,  y4};
 
         GeneralPath rval = new GeneralPath();
-        rval.append(new SimplePathIterator(xs, ys), false);
+        rval.append(new SimplePathIterator(xs, ys, true), false);
         return rval;
     }
 
