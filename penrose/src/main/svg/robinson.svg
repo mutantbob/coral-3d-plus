@@ -1,0 +1,43 @@
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="New document 1">
+<g >
+<text style="fill:#000;stroke:none;font-size:24px;font-family:Serif" x="100" y="25">decomposition</text>
+<text style="fill:#000;stroke:none;font-size:12px;font-family:Serif" x="220" y="50">alpha</text>
+<text style="fill:#000;stroke:none;font-size:12px;font-family:Serif" x="370" y="50">beta</text>
+<path transform=" translate(50,130) scale(100,-100)" style="fill:#ddf;stroke:#000;stroke-width:0.03px" d="M 0.0,0.0 0.8090169943749475,0.5877852522924731 1.0,0.0 " />
+<path transform=" translate(50,250) scale(100,-100)" style="fill:#ddf;stroke:#000;stroke-width:0.03px" d="M 0.0,0.0 -0.30901699437494734,0.9510565162951536 1.0,0.0 " />
+<path transform=" translate(200,130) scale(100,-100)" style="fill:#fdd;stroke:#000;stroke-width:0.03px" d="M 0.8090169943749475,0.5877852522924731 1.0,0.0 0.6180339887498949,0.0 " />
+<path transform=" translate(200,130) scale(100,-100)" style="fill:#dfd;stroke:#000;stroke-width:0.03px" d="M 0.6180339887498949,0.0 0.0,0.0 0.8090169943749475,0.5877852522924731 " />
+<path transform=" translate(350,130) scale(100,-100)" style="fill:#fdd;stroke:#000;stroke-width:0.03px" d="M 0.0,0.0 0.8090169943749475,0.5877852522924731 1.0,0.0 " />
+<path transform=" translate(200,250) scale(100,-100)" style="fill:#fdd;stroke:#000;stroke-width:0.03px" d="M 0.0,0.0 -0.30901699437494734,0.9510565162951536 1.0,0.0 " />
+<path transform=" translate(350,250) scale(100,-100)" style="fill:#fdd;stroke:#000;stroke-width:0.03px" d="M 1.0,0.0 0.19098300562505244,0.5877852522924732 0.0,0.0 " />
+<path transform=" translate(350,250) scale(100,-100)" style="fill:#dfd;stroke:#000;stroke-width:0.03px" d="M 0.19098300562505244,0.5877852522924732 0.0,0.0 -0.30901699437494734,0.9510565162951536 " />
+</g>
+<g transform="translate(0,400)">
+<text style="fill:#000;stroke:none;font-size:24px;font-family:Serif" x="100" y="25">composition</text>
+<text style="fill:#000;stroke:none;font-size:12px;font-family:Serif" x="220" y="50">alpha</text>
+<text style="fill:#000;stroke:none;font-size:12px;font-family:Serif" x="520" y="50">beta</text>
+<path transform=" translate(50,130) scale(100,-100)" style="fill:#ddf;stroke:#000;stroke-width:0.03px" d="M 0.0,0.0 0.8090169943749475,0.5877852522924731 1.0,0.0 " />
+<path transform=" translate(50,250) scale(100,-100)" style="fill:#ddf;stroke:#000;stroke-width:0.03px" d="M 0.0,0.0 -0.30901699437494734,0.9510565162951536 1.0,0.0 " />
+<path transform=" translate(200,130) scale(100,-100)" style="fill:#fdd;stroke:#000;stroke-width:0.03px" d="M 0.0,0.0 0.8090169943749475,0.5877852522924731 1.0,1.1102230246251565E-16 " />
+<path transform=" translate(200,130) scale(100,-100)" style="fill:#dfd;stroke:#000;stroke-width:0.03px" d="M 1.0,1.1102230246251565E-16 1.3090169943749475,-0.9510565162951536 0.0,0.0 " />
+<path transform=" translate(500,130) scale(100,-100)" style="fill:#fdd;stroke:#000;stroke-width:0.03px" d="M 0.0,0.0 0.8090169943749473,0.5877852522924731 1.0,0.0 " />
+<path transform=" translate(500,130) scale(100,-100)" style="fill:#dfd;stroke:#000;stroke-width:0.03px" d="M 0.8090169943749473,0.5877852522924731 1.0,0.0 1.3090169943749472,0.9510565162951535 " />
+<path transform=" translate(200,250) scale(100,-100)" style="fill:#fdd;stroke:#000;stroke-width:0.03px" d="M 1.0,0.0 0.1909830056250525,-0.5877852522924729 0.0,1.1102230246251565E-16 " />
+<path transform=" translate(200,250) scale(100,-100)" style="fill:#dfd;stroke:#000;stroke-width:0.03px" d="M 0.0,1.1102230246251565E-16 -0.30901699437494734,0.9510565162951536 1.0,0.0 " />
+<path transform=" translate(500,250) scale(100,-100)" style="fill:#fdd;stroke:#000;stroke-width:0.03px" d="M -1.618033988749895,0.0 2.220446049250313E-16,0.0 -0.30901699437494734,0.9510565162951536 " />
+<path transform=" translate(500,250) scale(100,-100)" style="fill:#dfd;stroke:#000;stroke-width:0.03px" d="M 2.220446049250313E-16,0.0 -0.30901699437494734,0.9510565162951536 1.0,0.0 " />
+</g>
+</svg>
